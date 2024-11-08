@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#include <vector>
+using namespace std;
 
 class kdt
 {
@@ -86,7 +88,7 @@ public:
         }
     }
 
-    void k_nearest(kdt *root, vector<int> &source, int d, int K, int *num_neighbours, vector<double> &k_distances, vector<kdt *> &k_nearest)
+    void K_nearest(kdt *root, vector<int> &source, int d, int K, int *num_neighbours, vector<double> &k_distances, vector<kdt *> &k_nearest)
     {
 
         if (!root)
@@ -100,11 +102,19 @@ public:
             nextbranch = root->right,
             otherbranch = root->left;
 
-        k_nearest(nextbranch, source, d + 1, K, num_neighbours, k_distances, k_nearest);
+        K_nearest(nextbranch, source, d + 1, K, num_neighbours, k_distances, k_nearest);
+
+        func(root, source, d, K, k_distances, k_nearest);
+
+        double dist_x = distance_parameter(root->data, source);
+
+        double dist = fabs(root->data[d % k] - source[d % k]);
+
+        if (dist < dist_x)
+            K_nearest(otherbranch, source, d + 1, K, num_neighbours, k_distances, k_nearest);
     }
 };
 
-using namespace std;
 int main()
 {
 
